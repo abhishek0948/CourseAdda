@@ -41,6 +41,11 @@ class ApiService {
     const response = await this.api.post('/api/auth/register', data);
     return response.data;
   }
+
+  async login(data: { email: string; password: string }) {
+    const response = await this.api.post('/api/auth/login', data);
+    return response.data;
+  }
 }
 
 export default new ApiService();

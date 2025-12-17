@@ -1,8 +1,9 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 // Pages
-import Login from './pages/Login';
-import Register from './pages/Register';
+import Login from './pages/Login.tsx';
+import Register from './pages/Register.tsx';
+import { AuthProvider } from './contexts/AuthContext';
 
 function App() {
   return (
@@ -11,7 +12,6 @@ function App() {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          
         </Routes>
       </AuthProvider>
     </BrowserRouter>
