@@ -7,6 +7,15 @@ export interface User {
   created_at: string;
 }
 
+export interface Progress {
+  course_id: string;
+  course_title: string;
+  total_chapters: number;
+  completed_chapters: number;
+  completion_percentage: number;
+  last_accessed_at: string;
+}
+
 export interface AuthResponse {
   message: string;
   user: User;

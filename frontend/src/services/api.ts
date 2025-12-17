@@ -46,6 +46,11 @@ class ApiService {
     const response = await this.api.post('/api/auth/login', data);
     return response.data;
   }
+
+  async getStudentProgress() {
+    const response = await this.api.get('/api/student/progress');
+    return response.data;
+  }
 }
 
 export default new ApiService();
