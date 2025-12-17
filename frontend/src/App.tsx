@@ -1,9 +1,21 @@
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
+// Pages
+import Login from './pages/Login';
+import Register from './pages/Register';
+
 function App() {
   return (
-    <>
-      <h1 className='text-red-500'>Hello</h1>
-    </>
-  )
+    <BrowserRouter>
+      <AuthProvider>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          
+        </Routes>
+      </AuthProvider>
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;
