@@ -126,6 +126,26 @@ class ApiService {
     const response = await this.api.post(`/api/courses/${courseId}/assign`, { studentIds });
     return response.data;
   }
+
+  async getUsers() {
+    const response = await this.api.get('/api/users');
+    return response.data;
+  }
+
+  async approveMentor(userId: string, approve: boolean) {
+    const response = await this.api.put(`/api/users/${userId}/approve-mentor`, { approve });
+    return response.data;
+  }
+
+  async deleteUser(userId: string) {
+    const response = await this.api.delete(`/api/users/${userId}`);
+    return response.data;
+  }
+
+  async getAnalytics() {
+    const response = await this.api.get('/api/users/analytics');
+    return response.data;
+  }
 }
 
 export default new ApiService();

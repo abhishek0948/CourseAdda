@@ -8,6 +8,11 @@ import Layout from './components/Layout';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import StudentDashboard from './pages/StudentDashboard';
+import CourseViewer from './pages/CourseViewer';
+import MentorDashboard from './pages/MentorDashboard';
+import CourseManagement from './pages/CourseManagement';
+import StudentAssignment from './pages/StudentAssignment';
+import AdminDashboard from './pages/AdminDashboard';
 
 const DashboardRouter: React.FC = () => {
   const { user } = useAuth();
@@ -17,6 +22,10 @@ const DashboardRouter: React.FC = () => {
   switch (user.role) {
     case 'student':
       return <StudentDashboard />;
+    case 'mentor':
+      return <MentorDashboard />;
+    case 'admin':
+      return <AdminDashboard />;
     default:
       return <Navigate to="/login" replace />;
   }
@@ -38,12 +47,37 @@ function App() {
             }
           >
             <Route path="/dashboard" element={<DashboardRouter />} />
+
+            <Route
+              path="/student/courses/:courseId"
+              element={
+                <ProtectedRoute allowedRoles={['student']}>
+                  <CourseViewer />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/mentor/courses/:courseId"
+              element={
+                <ProtectedRoute allowedRoles={['mentor']}>
+                  <CourseManagement />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/mentor/courses/:courseId/students"
+              element={
+                <ProtectedRoute allowedRoles={['mentor']}>
+                  <StudentAssignment />
+                </ProtectedRoute>
+              }
+            />
           </Route>
 
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
-        
-          <Route path="*" element={<Navigate to="/dashboard" replace />} />
           
+          <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Routes>
       </AuthProvider>
     </BrowserRouter>

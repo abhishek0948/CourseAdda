@@ -46,6 +46,15 @@ export interface Chapter {
   created_at: string;
 }
 
+export interface Analytics {
+  total_students: number;
+  total_mentors: number;
+  total_courses: number;
+  total_certificates: number;
+  pending_mentor_approvals: number;
+  average_course_completion: number;
+}
+
 export interface AuthResponse {
   message: string;
   user: User;
