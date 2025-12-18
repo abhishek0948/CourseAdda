@@ -16,6 +16,16 @@ export interface Progress {
   last_accessed_at: string;
 }
 
+export interface StudentProgress {
+  student_id: string;
+  student_name: string;
+  student_email: string;
+  total_chapters: number;
+  completed_chapters: number;
+  completion_percentage: number;
+  last_accessed_at: string | null;
+}
+
 export interface Course {
   id: string;
   title: string;

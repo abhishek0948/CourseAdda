@@ -111,6 +111,21 @@ class ApiService {
     const response = await this.api.post(`/api/student/chapters/${chapterId}/complete`);
     return response.data;
   }
+
+  async getCourseProgress(courseId: string) {
+    const response = await this.api.get(`/api/courses/${courseId}/progress`);
+    return response.data;
+  }
+
+  async getStudents() {
+    const response = await this.api.get('/api/courses/students');
+    return response.data;
+  }
+
+  async assignCourse(courseId: string, studentIds: string[]) {
+    const response = await this.api.post(`/api/courses/${courseId}/assign`, { studentIds });
+    return response.data;
+  }
 }
 
 export default new ApiService();
