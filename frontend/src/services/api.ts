@@ -71,6 +71,36 @@ class ApiService {
     const response = await this.api.delete(`/api/courses/${courseId}`);
     return response.data;
   }
+
+  async addChapter(courseId: string, data: {
+    title: string;
+    description: string;
+    image_url?: string;
+    video_url?: string;
+  }) {
+    const response = await this.api.post(`/api/courses/${courseId}/chapters`, data);
+    return response.data;
+  }
+
+  async getChapters(courseId: string) {
+    const response = await this.api.get(`/api/courses/${courseId}/chapters`);
+    return response.data;
+  }
+
+  async updateChapter(chapterId: string, data: {
+    title: string;
+    description: string;
+    image_url?: string;
+    video_url?: string;
+  }) {
+    const response = await this.api.put(`/api/chapters/${chapterId}`, data);
+    return response.data;
+  }
+  
+  async deleteChapter(chapterId: string) {
+    const response = await this.api.delete(`/api/chapters/${chapterId}`);
+    return response.data;
+  }
 }
 
 export default new ApiService();

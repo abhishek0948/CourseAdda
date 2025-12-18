@@ -25,6 +25,17 @@ export interface Course {
   mentor_name?: string;
 }
 
+export interface Chapter {
+  id: string;
+  course_id: string;
+  title: string;
+  description: string;
+  sequence_number: number;
+  image_url?: string;
+  video_url?: string;
+  created_at: string;
+}
+
 export interface AuthResponse {
   message: string;
   user: User;
