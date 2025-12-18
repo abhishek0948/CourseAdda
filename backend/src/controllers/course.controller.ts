@@ -194,7 +194,7 @@ export const addChapter = async (
   res: Response
 ): Promise<void> => {
   try {
-    const { id } = req.params;
+    const { id } = req.params; 
     const { title, description, image_url, video_url } = req.body;
     const mentorId = req.user?.userId;
 
@@ -263,7 +263,7 @@ export const getChapters = async (
   res: Response
 ): Promise<void> => {
   try {
-    const { id } = req.params; 
+    const { id } = req.params;
     const mentorId = req.user?.userId;
 
     const { data: course, error: fetchError } = await supabase
@@ -307,7 +307,7 @@ export const assignCourse = async (
 ): Promise<void> => {
   try {
     const { id } = req.params;
-    const { studentIds } = req.body;
+    const { studentIds } = req.body; 
     const mentorId = req.user?.userId;
 
     console.log("Mentors ids:",mentorId);
