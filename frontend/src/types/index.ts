@@ -16,6 +16,15 @@ export interface Progress {
   last_accessed_at: string;
 }
 
+export interface Course {
+  id: string;
+  title: string;
+  description: string;
+  created_by: string;
+  created_at: string;
+  mentor_name?: string;
+}
+
 export interface AuthResponse {
   message: string;
   user: User;

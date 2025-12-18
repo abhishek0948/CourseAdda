@@ -51,6 +51,26 @@ class ApiService {
     const response = await this.api.get('/api/student/progress');
     return response.data;
   }
+
+  async createCourse(data: { title: string; description: string }) {
+    const response = await this.api.post('/api/courses', data);
+    return response.data;
+  }
+
+  async getMentorCourses() {
+    const response = await this.api.get('/api/courses/my');
+    return response.data;
+  }
+
+  async updateCourse(courseId: string, data: { title: string; description: string }) {
+    const response = await this.api.put(`/api/courses/${courseId}`, data);
+    return response.data;
+  }
+
+  async deleteCourse(courseId: string) {
+    const response = await this.api.delete(`/api/courses/${courseId}`);
+    return response.data;
+  }
 }
 
 export default new ApiService();
