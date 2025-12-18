@@ -101,6 +101,16 @@ class ApiService {
     const response = await this.api.delete(`/api/chapters/${chapterId}`);
     return response.data;
   }
+
+  async getStudentChapters(courseId: string) {
+    const response = await this.api.get(`/api/student/courses/${courseId}/chapters`);
+    return response.data;
+  }
+
+  async completeChapter(chapterId: string) {
+    const response = await this.api.post(`/api/student/chapters/${chapterId}/complete`);
+    return response.data;
+  }
 }
 
 export default new ApiService();

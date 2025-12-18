@@ -41,3 +41,8 @@ export interface AuthResponse {
   user: User;
   token: string | null;
 }
+
+export interface ChapterWithStatus extends Chapter {
+  is_completed: boolean;
+  is_locked: boolean;
+}
