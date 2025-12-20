@@ -7,25 +7,6 @@ export interface User {
   created_at: string;
 }
 
-export interface Progress {
-  course_id: string;
-  course_title: string;
-  total_chapters: number;
-  completed_chapters: number;
-  completion_percentage: number;
-  last_accessed_at: string;
-}
-
-export interface StudentProgress {
-  student_id: string;
-  student_name: string;
-  student_email: string;
-  total_chapters: number;
-  completed_chapters: number;
-  completion_percentage: number;
-  last_accessed_at: string | null;
-}
-
 export interface Course {
   id: string;
   title: string;
@@ -44,6 +25,32 @@ export interface Chapter {
   image_url?: string;
   video_url?: string;
   created_at: string;
+}
+
+export interface Progress {
+  course_id: string;
+  course_title: string;
+  total_chapters: number;
+  completed_chapters: number;
+  completion_percentage: number;
+  last_accessed_at: string;
+}
+
+export interface Certificate {
+  id: string;
+  student_id: string;
+  course_id: string;
+  issued_at: string;
+}
+
+export interface StudentProgress {
+  student_id: string;
+  student_name: string;
+  student_email: string;
+  total_chapters: number;
+  completed_chapters: number;
+  completion_percentage: number;
+  last_accessed_at: string | null;
 }
 
 export interface Analytics {

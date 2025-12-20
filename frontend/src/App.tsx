@@ -5,10 +5,12 @@ import { useAuth } from './contexts/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import Layout from './components/Layout';
 
+// Pages
 import Login from './pages/Login';
 import Register from './pages/Register';
 import StudentDashboard from './pages/StudentDashboard';
 import CourseViewer from './pages/CourseViewer';
+import CertificatePage from './pages/CertificatePage';
 import MentorDashboard from './pages/MentorDashboard';
 import CourseManagement from './pages/CourseManagement';
 import StudentAssignment from './pages/StudentAssignment';
@@ -53,6 +55,14 @@ function App() {
               element={
                 <ProtectedRoute allowedRoles={['student']}>
                   <CourseViewer />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/student/certificate/:courseId"
+              element={
+                <ProtectedRoute allowedRoles={['student']}>
+                  <CertificatePage />
                 </ProtectedRoute>
               }
             />
