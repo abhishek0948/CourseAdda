@@ -7,6 +7,7 @@ export const getStudents = async (
   res: Response
 ): Promise<void> => {
   try {
+    // Get all students for course assignment
     const { data: students, error } = await supabase
       .from('users')
       .select('id, email, name, role, created_at')
@@ -104,6 +105,7 @@ export const updateCourse = async (
     const { title, description } = req.body;
     const mentorId = req.user?.userId;
 
+    // Verify course ownership
     const { data: course, error: fetchError } = await supabase
       .from('courses')
       .select('mentor_id')
@@ -155,6 +157,7 @@ export const deleteCourse = async (
     const { id } = req.params;
     const mentorId = req.user?.userId;
 
+    // Verify course ownership
     const { data: course, error: fetchError } = await supabase
       .from('courses')
       .select('mentor_id')
@@ -194,7 +197,7 @@ export const addChapter = async (
   res: Response
 ): Promise<void> => {
   try {
-    const { id } = req.params; 
+    const { id } = req.params; // course id
     const { title, description, image_url, video_url } = req.body;
     const mentorId = req.user?.userId;
 
@@ -203,6 +206,7 @@ export const addChapter = async (
       return;
     }
 
+    // Verify course ownership
     const { data: course, error: fetchError } = await supabase
       .from('courses')
       .select('mentor_id')
@@ -219,6 +223,7 @@ export const addChapter = async (
       return;
     }
 
+    // Get the next sequence order
     const { data: lastChapter } = await supabase
       .from('chapters')
       .select('sequence_order')
@@ -229,6 +234,7 @@ export const addChapter = async (
 
     const sequenceOrder = lastChapter ? lastChapter.sequence_order + 1 : 1;
 
+    // Create chapter
     const { data: chapter, error: createError } = await supabase
       .from('chapters')
       .insert({
@@ -263,9 +269,10 @@ export const getChapters = async (
   res: Response
 ): Promise<void> => {
   try {
-    const { id } = req.params;
+    const { id } = req.params; // course id
     const mentorId = req.user?.userId;
 
+    // Verify course ownership
     const { data: course, error: fetchError } = await supabase
       .from('courses')
       .select('mentor_id')
@@ -306,8 +313,8 @@ export const assignCourse = async (
   res: Response
 ): Promise<void> => {
   try {
-    const { id } = req.params;
-    const { studentIds } = req.body; 
+    const { id } = req.params; // course id
+    const { studentIds } = req.body; // array of student IDs
     const mentorId = req.user?.userId;
 
     console.log("Mentors ids:",mentorId);
@@ -318,6 +325,7 @@ export const assignCourse = async (
       return;
     }
 
+    // Verify course ownership
     const { data: course, error: fetchError } = await supabase
       .from('courses')
       .select('mentor_id')
@@ -334,6 +342,7 @@ export const assignCourse = async (
       return;
     }
 
+    // Verify all users are students
     const { data: students, error: studentsError } = await supabase
       .from('users')
       .select('id, role')
@@ -354,6 +363,7 @@ export const assignCourse = async (
       return;
     }
 
+    // Create assignments (ignore duplicates)
     const assignments = studentIds.map(studentId => ({
       course_id: id,
       student_id: studentId,
@@ -385,9 +395,10 @@ export const getStudentProgress = async (
   res: Response
 ): Promise<void> => {
   try {
-    const { id } = req.params; 
+    const { id } = req.params; // course id
     const mentorId = req.user?.userId;
 
+    // Verify course ownership
     const { data: course, error: fetchError } = await supabase
       .from('courses')
       .select('mentor_id')
@@ -404,6 +415,7 @@ export const getStudentProgress = async (
       return;
     }
 
+    // Get all students assigned to this course
     const { data: assignments } = await supabase
       .from('course_assignments')
       .select(`
@@ -412,11 +424,13 @@ export const getStudentProgress = async (
       `)
       .eq('course_id', id);
 
+    // Get total chapters
     const { count: totalChapters } = await supabase
       .from('chapters')
       .select('*', { count: 'exact', head: true })
       .eq('course_id', id);
 
+    // Get progress for each student
     const studentProgress = await Promise.all(
       (assignments || []).map(async (assignment) => {
         const { count: completedChapters } = await supabase

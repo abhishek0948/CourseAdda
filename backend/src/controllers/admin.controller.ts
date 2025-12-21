@@ -32,13 +32,14 @@ export const approveMentor = async (
 ): Promise<void> => {
   try {
     const { id } = req.params;
-    const { approve } = req.body; 
+    const { approve } = req.body; // true for approve, false for reject
 
     if (typeof approve !== 'boolean') {
       res.status(400).json({ error: 'Approve field must be a boolean' });
       return;
     }
 
+    // Check if user exists and is a mentor
     const { data: user, error: fetchError } = await supabase
       .from('users')
       .select('role, approval_status')
@@ -55,6 +56,7 @@ export const approveMentor = async (
       return;
     }
 
+    // Update approval status
     const newStatus = approve ? ApprovalStatus.APPROVED : ApprovalStatus.REJECTED;
 
     const { data: updatedUser, error: updateError } = await supabase
@@ -90,6 +92,7 @@ export const deleteUser = async (
   try {
     const { id } = req.params;
 
+    // Prevent admin from deleting themselves
     if (id === req.user?.userId) {
       res.status(400).json({ error: 'Cannot delete your own account' });
       return;
@@ -118,18 +121,22 @@ export const getAnalytics = async (
   res: Response
 ): Promise<void> => {
   try {
+    // Get user counts by role
     const { data: users } = await supabase
       .from('users')
       .select('role, approval_status');
 
+    // Get course count
     const { count: courseCount } = await supabase
       .from('courses')
       .select('*', { count: 'exact', head: true });
 
+    // Get completion count (certificates issued)
     const { count: completionCount } = await supabase
       .from('certificates')
       .select('*', { count: 'exact', head: true });
 
+    // Calculate user statistics
     const userStats = {
       total: users?.length || 0,
       students: users?.filter(u => u.role === 'student').length || 0,

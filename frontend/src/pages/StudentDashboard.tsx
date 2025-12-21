@@ -16,15 +16,16 @@ const StudentDashboard: React.FC = () => {
   const loadProgress = async () => {
     try {
       const data = await apiService.getStudentProgress();
+      // Backend returns { progress: [...] }
       const progressArray = data.progress || [];
-
+      // Transform to match expected format
       const transformedProgress = progressArray.map((item: any) => ({
         course_id: item.course.id,
         course_title: item.course.title,
         total_chapters: item.totalChapters,
         completed_chapters: item.completedCount,
         completion_percentage: item.percentage,
-        last_accessed_at: new Date().toISOString(), 
+        last_accessed_at: new Date().toISOString(), // Backend doesn't return this yet
       }));
       setProgress(transformedProgress);
     } catch (error) {

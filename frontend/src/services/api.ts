@@ -13,6 +13,7 @@ class ApiService {
       },
     });
 
+    // Add token to requests
     this.api.interceptors.request.use(
       (config) => {
         const token = localStorage.getItem('token');
@@ -24,6 +25,7 @@ class ApiService {
       (error) => Promise.reject(error)
     );
 
+    // Handle 401 errors
     this.api.interceptors.response.use(
       (response) => response,
       (error) => {
@@ -37,6 +39,7 @@ class ApiService {
     );
   }
 
+  // Auth
   async register(data: { email: string; password: string; name: string; role: string }) {
     const response = await this.api.post('/api/auth/register', data);
     return response.data;
@@ -47,8 +50,30 @@ class ApiService {
     return response.data;
   }
 
-  async getStudentProgress() {
-    const response = await this.api.get('/api/student/progress');
+  // Admin
+  async getUsers() {
+    const response = await this.api.get('/api/users');
+    return response.data;
+  }
+
+  async approveMentor(userId: string, approve: boolean) {
+    const response = await this.api.put(`/api/users/${userId}/approve-mentor`, { approve });
+    return response.data;
+  }
+
+  async deleteUser(userId: string) {
+    const response = await this.api.delete(`/api/users/${userId}`);
+    return response.data;
+  }
+
+  async getAnalytics() {
+    const response = await this.api.get('/api/users/analytics');
+    return response.data;
+  }
+
+  // Mentor
+  async getStudents() {
+    const response = await this.api.get('/api/courses/students');
     return response.data;
   }
 
@@ -96,9 +121,25 @@ class ApiService {
     const response = await this.api.put(`/api/chapters/${chapterId}`, data);
     return response.data;
   }
-  
+
   async deleteChapter(chapterId: string) {
     const response = await this.api.delete(`/api/chapters/${chapterId}`);
+    return response.data;
+  }
+
+  async assignCourse(courseId: string, studentIds: string[]) {
+    const response = await this.api.post(`/api/courses/${courseId}/assign`, { studentIds });
+    return response.data;
+  }
+
+  async getCourseProgress(courseId: string) {
+    const response = await this.api.get(`/api/courses/${courseId}/progress`);
+    return response.data;
+  }
+
+  // Student
+  async getStudentCourses() {
+    const response = await this.api.get('/api/student/courses');
     return response.data;
   }
 
@@ -112,38 +153,15 @@ class ApiService {
     return response.data;
   }
 
-  async getCourseProgress(courseId: string) {
-    const response = await this.api.get(`/api/courses/${courseId}/progress`);
+  async getStudentProgress() {
+    const response = await this.api.get('/api/student/progress');
     return response.data;
   }
 
-  async getStudents() {
-    const response = await this.api.get('/api/courses/students');
-    return response.data;
-  }
-
-  async assignCourse(courseId: string, studentIds: string[]) {
-    const response = await this.api.post(`/api/courses/${courseId}/assign`, { studentIds });
-    return response.data;
-  }
-
-  async getUsers() {
-    const response = await this.api.get('/api/users');
-    return response.data;
-  }
-
-  async approveMentor(userId: string, approve: boolean) {
-    const response = await this.api.put(`/api/users/${userId}/approve-mentor`, { approve });
-    return response.data;
-  }
-
-  async deleteUser(userId: string) {
-    const response = await this.api.delete(`/api/users/${userId}`);
-    return response.data;
-  }
-
-  async getAnalytics() {
-    const response = await this.api.get('/api/users/analytics');
+  async downloadCertificate(courseId: string) {
+    const response = await this.api.get(`/api/certificates/${courseId}`, {
+      responseType: 'blob',
+    });
     return response.data;
   }
 }

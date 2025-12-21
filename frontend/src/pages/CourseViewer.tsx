@@ -23,6 +23,7 @@ const CourseViewer: React.FC = () => {
       setChapters(data.chapters);
       setCourseTitle(data.course_title);
       
+      // Auto-select first unlocked chapter
       const firstUnlocked = data.chapters.find((ch: ChapterWithStatus) => !ch.is_locked);
       if (firstUnlocked) {
         setSelectedChapter(firstUnlocked);
@@ -40,7 +41,7 @@ const CourseViewer: React.FC = () => {
     setIsCompleting(true);
     try {
       await apiService.completeChapter(selectedChapter.id);
-      await loadChapters(); 
+      await loadChapters(); // Reload to update status
     } catch (error: any) {
       alert(error.response?.data?.error || 'Failed to complete chapter');
     } finally {
@@ -69,6 +70,7 @@ const CourseViewer: React.FC = () => {
       <h1 className="text-3xl font-bold text-gray-900">{courseTitle}</h1>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Chapter List */}
         <div className="lg:col-span-1 bg-white rounded-lg shadow-md p-4 h-fit">
           <h2 className="text-lg font-bold text-gray-900 mb-4">Chapters</h2>
           <div className="space-y-2">
@@ -106,6 +108,7 @@ const CourseViewer: React.FC = () => {
           </div>
         </div>
 
+        {/* Chapter Content */}
         <div className="lg:col-span-2 bg-white rounded-lg shadow-md p-6">
           {selectedChapter ? (
             <div className="space-y-6">
@@ -124,6 +127,7 @@ const CourseViewer: React.FC = () => {
                 <p className="text-gray-600">{selectedChapter.description}</p>
               </div>
 
+              {/* Video */}
               {selectedChapter.video_url && (
                 <div className="aspect-video bg-gray-900 rounded-lg overflow-hidden">
                   {selectedChapter.video_url.includes('youtube.com') || 
@@ -142,6 +146,7 @@ const CourseViewer: React.FC = () => {
                 </div>
               )}
 
+              {/* Image */}
               {selectedChapter.image_url && (
                 <div className="rounded-lg overflow-hidden">
                   <img
@@ -162,6 +167,7 @@ const CourseViewer: React.FC = () => {
                 </div>
               )}
 
+              {/* Complete Button */}
               {!selectedChapter.is_completed && (
                 <button
                   onClick={handleCompleteChapter}
