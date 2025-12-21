@@ -15,7 +15,6 @@ export const authorize = (...allowedRoles: UserRole[]) => {
         return;
       }
 
-      // Check if user role is in allowed roles
       if (!allowedRoles.includes(req.user.role)) {
         res.status(403).json({ 
           error: 'Forbidden: Insufficient permissions',
@@ -25,7 +24,6 @@ export const authorize = (...allowedRoles: UserRole[]) => {
         return;
       }
 
-      // Additional check for mentors - must be approved
       if (req.user.role === UserRole.MENTOR) {
         const { data: user, error } = await supabase
           .from('users')

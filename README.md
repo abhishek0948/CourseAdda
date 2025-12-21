@@ -57,4 +57,5 @@ npm run preview
 ## My AI Usage
 - AI tools used: Chatgpt, Gemini.
 - How AI was used: accelerated test authoring/fixes (Vitest + Testing Library, Jest); suggested UI text/layout tweaks; guided Supabase connection/config (env wiring, client usage).
+- For pdf generation logic 
 - Reflection: AI reduced debugging time for tests, speed up UI polish, and helped avoid Supabase setup pitfalls—overall higher productivity and faster learning feedback loops.

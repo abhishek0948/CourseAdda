@@ -8,22 +8,18 @@ export const register = async (req: Request, res: Response): Promise<void> => {
   try {
     const { email, password, name, role } = req.body;
 
-    // Validate input
     if (!email || !password || !name) {
       res.status(400).json({ error: 'Email, password, and name are required' });
       return;
     }
 
-    // Only students can self-register, or explicitly set role
     const userRole = role || UserRole.STUDENT;
     
-    // Check if role is valid
     if (!Object.values(UserRole).includes(userRole)) {
       res.status(400).json({ error: 'Invalid role' });
       return;
     }
 
-    // Check if user already exists
     const { data: existingUser } = await supabase
       .from('users')
       .select('id')
@@ -35,16 +31,12 @@ export const register = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    // Hash password
     const passwordHash = await hashPassword(password);
 
-    // Determine approval status
-    // Students are auto-approved, mentors need approval, admins created manually
     const approvalStatus = userRole === UserRole.STUDENT 
       ? ApprovalStatus.APPROVED 
       : ApprovalStatus.PENDING;
 
-    // Create user
     const { data: user, error } = await supabase
       .from('users')
       .insert({
@@ -63,7 +55,6 @@ export const register = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    // Generate token only for approved users (students)
     let token = null;
     if (approvalStatus === ApprovalStatus.APPROVED) {
       token = generateToken({
@@ -96,13 +87,11 @@ export const login = async (req: Request, res: Response): Promise<void> => {
   try {
     const { email, password } = req.body;
 
-    // Validate input
     if (!email || !password) {
       res.status(400).json({ error: 'Email and password are required' });
       return;
     }
 
-    // Find user
     const { data: user, error } = await supabase
       .from('users')
       .select('*')
@@ -114,7 +103,6 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    // Check password
     const isPasswordValid = await comparePassword(password, user.password_hash);
 
     if (!isPasswordValid) {
@@ -122,7 +110,6 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    // Check approval status for mentors
     if (user.role === UserRole.MENTOR && user.approval_status !== ApprovalStatus.APPROVED) {
       res.status(403).json({ 
         error: 'Account pending approval',
@@ -131,7 +118,6 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    // Generate token
     const token = generateToken({
       userId: user.id,
       role: user.role,

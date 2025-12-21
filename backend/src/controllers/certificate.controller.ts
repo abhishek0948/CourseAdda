@@ -11,7 +11,6 @@ export const getCertificate = async (
     const { courseId } = req.params;
     const studentId = req.user?.userId;
 
-    // Verify course assignment
     const { data: assignment, error: assignmentError } = await supabase
       .from('course_assignments')
       .select('*')
@@ -24,7 +23,6 @@ export const getCertificate = async (
       return;
     }
 
-    // Check if course is 100% complete
     const { count: totalChapters } = await supabase
       .from('chapters')
       .select('*', { count: 'exact', head: true })
@@ -50,7 +48,6 @@ export const getCertificate = async (
       return;
     }
 
-    // Get or create certificate record
     let certificate;
     const { data: existingCert } = await supabase
       .from('certificates')
@@ -80,7 +77,6 @@ export const getCertificate = async (
       certificate = newCert;
     }
 
-    // Get student and course details
     const { data: student } = await supabase
       .from('users')
       .select('name')
@@ -98,7 +94,6 @@ export const getCertificate = async (
       return;
     }
 
-    // Generate and send PDF
     await generateCertificatePDF(
       student.name,
       course.title,

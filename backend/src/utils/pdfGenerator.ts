@@ -10,24 +10,20 @@ export const generateCertificatePDF = async (
   res: Response
 ): Promise<void> => {
   try {
-    // Create a new PDF document
     const doc = new PDFDocument({
       size: 'A4',
       layout: 'landscape',
       margins: { top: 50, bottom: 50, left: 50, right: 50 },
     });
 
-    // Set response headers
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader(
       'Content-Disposition',
       `attachment; filename=certificate-${studentName.replace(/\s+/g, '_')}.pdf`
     );
 
-    // Pipe the PDF to the response
     doc.pipe(res);
 
-    // Add border
     doc
       .rect(30, 30, doc.page.width - 60, doc.page.height - 60)
       .lineWidth(3)
@@ -40,7 +36,6 @@ export const generateCertificatePDF = async (
       .strokeColor('#1a73e8')
       .stroke();
 
-    // Add title
     doc
       .font('Helvetica-Bold')
       .fontSize(48)
@@ -58,7 +53,6 @@ export const generateCertificatePDF = async (
         width: doc.page.width,
       });
 
-    // Add "This is to certify that"
     doc
       .font('Helvetica')
       .fontSize(16)
@@ -68,7 +62,6 @@ export const generateCertificatePDF = async (
         width: doc.page.width,
       });
 
-    // Add student name
     doc
       .font('Helvetica-Bold')
       .fontSize(32)
@@ -78,7 +71,6 @@ export const generateCertificatePDF = async (
         width: doc.page.width,
       });
 
-    // Add underline for name
     const nameWidth = doc.widthOfString(studentName);
     const centerX = (doc.page.width - nameWidth) / 2;
     doc
@@ -88,7 +80,6 @@ export const generateCertificatePDF = async (
       .lineWidth(2)
       .stroke();
 
-    // Add completion text
     doc
       .font('Helvetica')
       .fontSize(16)
@@ -98,7 +89,6 @@ export const generateCertificatePDF = async (
         width: doc.page.width,
       });
 
-    // Add course name
     doc
       .font('Helvetica-Bold')
       .fontSize(24)
@@ -108,7 +98,6 @@ export const generateCertificatePDF = async (
         width: doc.page.width,
       });
 
-    // Add completion date
     const formattedDate = new Date(completionDate).toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'long',
@@ -124,7 +113,6 @@ export const generateCertificatePDF = async (
         width: doc.page.width,
       });
 
-    // Add footer
     doc
       .fontSize(10)
       .fillColor('#999999')
@@ -133,7 +121,6 @@ export const generateCertificatePDF = async (
         width: doc.page.width,
       });
 
-    // Finalize the PDF
     doc.end();
   } catch (error) {
     console.error('PDF generation error:', error);

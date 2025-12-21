@@ -9,7 +9,6 @@ export const getMyCourses = async (
   try {
     const studentId = req.user?.userId;
 
-    // Get assigned courses with progress
     const { data: assignments, error } = await supabase
       .from('course_assignments')
       .select(`
@@ -35,18 +34,15 @@ export const getMyCourses = async (
       return;
     }
 
-    // Calculate progress for each course
     const coursesWithProgress = await Promise.all(
       (assignments || []).map(async (assignment: any) => {
         const courseId = assignment.courses?.id;
 
-        // Get total chapters
         const { count: totalChapters } = await supabase
           .from('chapters')
           .select('*', { count: 'exact', head: true })
           .eq('course_id', courseId);
 
-        // Get completed chapters
         const { count: completedChapters } = await supabase
           .from('progress')
           .select('*', { count: 'exact', head: true })
@@ -85,7 +81,6 @@ export const getCourseChapters = async (
     const { courseId } = req.params;
     const studentId = req.user?.userId;
 
-    // Verify student is assigned to this course
     const { data: assignment, error: assignmentError } = await supabase
       .from('course_assignments')
       .select('*')
@@ -98,7 +93,6 @@ export const getCourseChapters = async (
       return;
     }
 
-    // Get all chapters
     const { data: chapters, error: chaptersError } = await supabase
       .from('chapters')
       .select('*')
@@ -111,7 +105,6 @@ export const getCourseChapters = async (
       return;
     }
 
-    // Get student's completed chapters
     const { data: completedProgress } = await supabase
       .from('progress')
       .select('chapter_id, completed_at')
@@ -122,14 +115,12 @@ export const getCourseChapters = async (
       completedProgress?.map(p => p.chapter_id) || []
     );
 
-    // Get course title
     const { data: course } = await supabase
       .from('courses')
       .select('title')
       .eq('id', courseId)
       .single();
 
-    // Add completion status and accessibility to each chapter
     const chaptersWithStatus = chapters?.map((chapter, index) => {
       const isCompleted = completedChapterIds.has(chapter.id);
       const previousChapterCompleted = index === 0 || 
@@ -138,7 +129,7 @@ export const getCourseChapters = async (
 
       return {
         ...chapter,
-        sequence_number: chapter.sequence_order, // Map to frontend field name
+        sequence_number: chapter.sequence_order,
         is_completed: isCompleted,
         is_locked: !isAccessible,
         completed_at: completedProgress?.find(p => p.chapter_id === chapter.id)?.completed_at,
@@ -163,7 +154,6 @@ export const completeChapter = async (
     const { chapterId } = req.params;
     const studentId = req.user?.userId;
 
-    // Get chapter details
     const { data: chapter, error: chapterError } = await supabase
       .from('chapters')
       .select('id, course_id, sequence_order')
@@ -175,7 +165,6 @@ export const completeChapter = async (
       return;
     }
 
-    // Verify student is assigned to this course
     const { data: assignment, error: assignmentError } = await supabase
       .from('course_assignments')
       .select('*')
@@ -188,7 +177,6 @@ export const completeChapter = async (
       return;
     }
 
-    // Check if chapter is already completed
     const { data: existingProgress } = await supabase
       .from('progress')
       .select('*')
@@ -201,9 +189,7 @@ export const completeChapter = async (
       return;
     }
 
-    // Enforce sequential completion
     if (chapter.sequence_order > 1) {
-      // Get previous chapter
       const { data: previousChapter } = await supabase
         .from('chapters')
         .select('id')
@@ -212,7 +198,6 @@ export const completeChapter = async (
         .single();
 
       if (previousChapter) {
-        // Check if previous chapter is completed
         const { data: previousProgress } = await supabase
           .from('progress')
           .select('*')
@@ -230,7 +215,6 @@ export const completeChapter = async (
       }
     }
 
-    // Mark chapter as completed
     const { data: progress, error: progressError } = await supabase
       .from('progress')
       .insert({
@@ -247,7 +231,6 @@ export const completeChapter = async (
       return;
     }
 
-    // Check if course is fully completed
     const { count: totalChapters } = await supabase
       .from('chapters')
       .select('*', { count: 'exact', head: true })
@@ -261,7 +244,6 @@ export const completeChapter = async (
 
     const isFullyCompleted = totalChapters === completedChapters;
 
-    // If fully completed, generate certificate
     if (isFullyCompleted) {
       const { data: existingCert } = await supabase
         .from('certificates')
@@ -300,13 +282,11 @@ export const markProgress = async (
     const { courseId, chapterId } = req.body;
     const studentId = req.user?.userId;
 
-    // Validate required fields
     if (!courseId || !chapterId) {
       res.status(400).json({ error: 'courseId and chapterId are required' });
       return;
     }
 
-    // Get chapter details
     const { data: chapter, error: chapterError } = await supabase
       .from('chapters')
       .select('id, course_id, sequence_order')
@@ -319,7 +299,6 @@ export const markProgress = async (
       return;
     }
 
-    // Verify student is assigned to this course
     const { data: assignment, error: assignmentError } = await supabase
       .from('course_assignments')
       .select('*')
@@ -332,7 +311,6 @@ export const markProgress = async (
       return;
     }
 
-    // Check if chapter is already completed
     const { data: existingProgress } = await supabase
       .from('progress')
       .select('*')
@@ -348,7 +326,6 @@ export const markProgress = async (
       return;
     }
 
-    // Mark chapter as completed
     const { data: progress, error: progressError } = await supabase
       .from('progress')
       .insert({
@@ -383,7 +360,6 @@ export const getCourseProgress = async (
     const { id: courseId } = req.params;
     const studentId = req.user?.userId;
 
-    // Verify student is assigned to this course
     const { data: assignment, error: assignmentError } = await supabase
       .from('course_assignments')
       .select('*')
@@ -396,13 +372,11 @@ export const getCourseProgress = async (
       return;
     }
 
-    // Get total chapters
     const { count: totalChapters } = await supabase
       .from('chapters')
       .select('*', { count: 'exact', head: true })
       .eq('course_id', courseId);
 
-    // Get completed chapters
     const { data: completedChapters, count: completedCount } = await supabase
       .from('progress')
       .select('chapter_id, completed_at', { count: 'exact' })
@@ -434,7 +408,6 @@ export const getMyProgress = async (
   try {
     const studentId = req.user?.userId;
 
-    // Get all assigned courses
     const { data: assignments } = await supabase
       .from('course_assignments')
       .select(`
@@ -446,18 +419,15 @@ export const getMyProgress = async (
       `)
       .eq('student_id', studentId);
 
-    // Get progress for each course
     const progressData = await Promise.all(
       (assignments || []).map(async (assignment: any) => {
         const courseId = assignment.courses.id;
 
-        // Get total chapters
         const { count: totalChapters } = await supabase
           .from('chapters')
           .select('*', { count: 'exact', head: true })
           .eq('course_id', courseId);
 
-        // Get completed chapters with details
         const { data: completedChapters } = await supabase
           .from('progress')
           .select(`
