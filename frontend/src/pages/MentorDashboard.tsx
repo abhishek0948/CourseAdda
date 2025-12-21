@@ -18,7 +18,6 @@ const MentorDashboard: React.FC = () => {
   const loadCourses = async () => {
     try {
       const data = await apiService.getMentorCourses();
-      // Backend returns { courses: [...] }
       setCourses(data.courses || []);
     } catch (error) {
       console.error('Failed to load courses:', error);

@@ -20,7 +20,6 @@ const AdminDashboard: React.FC = () => {
         apiService.getUsers(),
       ]);
       
-      // Backend returns { analytics: { users: {...}, courses: 0, completions: 0 } }
       const analyticsData = analyticsResponse.analytics;
       const transformedAnalytics = {
         total_students: analyticsData.users.students || 0,
@@ -28,10 +27,9 @@ const AdminDashboard: React.FC = () => {
         total_courses: analyticsData.courses || 0,
         total_certificates: analyticsData.completions || 0,
         pending_mentor_approvals: analyticsData.users.pendingMentors || 0,
-        average_course_completion: 0, // Not implemented in backend yet
+        average_course_completion: 0,
       };
       
-      // Backend returns { users: [...] }
       setAnalytics(transformedAnalytics);
       setUsers(usersResponse.users || []);
     } catch (error) {

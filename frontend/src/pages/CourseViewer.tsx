@@ -23,7 +23,6 @@ const CourseViewer: React.FC = () => {
       setChapters(data.chapters);
       setCourseTitle(data.course_title);
       
-      // Auto-select first unlocked chapter
       const firstUnlocked = data.chapters.find((ch: ChapterWithStatus) => !ch.is_locked);
       if (firstUnlocked) {
         setSelectedChapter(firstUnlocked);
@@ -41,7 +40,7 @@ const CourseViewer: React.FC = () => {
     setIsCompleting(true);
     try {
       await apiService.completeChapter(selectedChapter.id);
-      await loadChapters(); // Reload to update status
+      await loadChapters();
     } catch (error: any) {
       alert(error.response?.data?.error || 'Failed to complete chapter');
     } finally {

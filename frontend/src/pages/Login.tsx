@@ -28,17 +28,25 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-900 to-primary-700 flex items-center justify-center px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-2xl">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500 flex items-center justify-center px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+      {/* Animated background elements */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-white/10 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-white/10 rounded-full blur-3xl animate-pulse" style={{animationDelay: '1s'}}></div>
+      </div>
+      
+      <div className="max-w-md w-full space-y-8 glass-effect p-10 rounded-2xl shadow-2xl animate-scaleIn relative z-10">
         <div className="text-center">
           <div className="flex justify-center">
-            <GraduationCap className="h-16 w-16 text-primary-600" />
+            <div className="bg-gradient-to-br from-primary-500 to-purple-600 p-3 rounded-2xl shadow-lg">
+              <GraduationCap className="h-12 w-12 text-white" />
+            </div>
           </div>
-          <h2 className="mt-4 text-3xl font-extrabold text-gray-900">
-            Internship LMS
+          <h2 className="mt-6 text-4xl font-black text-gray-900 tracking-tight">
+            Welcome Back
           </h2>
-          <p className="mt-2 text-sm text-gray-600">
-            Sign in to your account
+          <p className="mt-3 text-base text-gray-600 font-medium">
+            Sign in to continue your learning journey
           </p>
         </div>
 
@@ -89,7 +97,7 @@ const Login: React.FC = () => {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="w-full flex justify-center py-3.5 px-4 border border-transparent rounded-xl shadow-lg text-base font-bold text-white bg-gradient-to-r from-primary-600 to-purple-600 hover:from-primary-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 transform hover:scale-[1.02]"
           >
             {isLoading ? 'Signing in...' : 'Sign in'}
           </button>

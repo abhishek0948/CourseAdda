@@ -25,7 +25,6 @@ const CourseManagement: React.FC = () => {
   const loadChapters = async () => {
     try {
       const data = await apiService.getChapters(courseId!);
-      // Backend returns { chapters: [...] }
       setChapters(data.chapters || []);
     } catch (error) {
       console.error('Failed to load chapters:', error);

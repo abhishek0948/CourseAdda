@@ -38,11 +38,9 @@ function App() {
     <BrowserRouter>
       <AuthProvider>
         <Routes>
-          {/* Public Routes */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
 
-          {/* Protected Routes */}
           <Route
             element={
               <ProtectedRoute>
@@ -52,7 +50,6 @@ function App() {
           >
             <Route path="/dashboard" element={<DashboardRouter />} />
 
-            {/* Student Routes */}
             <Route
               path="/student/courses/:courseId"
               element={
@@ -70,7 +67,6 @@ function App() {
               }
             />
 
-            {/* Mentor Routes */}
             <Route
               path="/mentor/courses/:courseId"
               element={
@@ -89,10 +85,8 @@ function App() {
             />
           </Route>
 
-          {/* Redirect root to dashboard */}
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
           
-          {/* Catch all - redirect to dashboard */}
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Routes>
       </AuthProvider>

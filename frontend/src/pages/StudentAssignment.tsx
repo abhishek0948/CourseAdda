@@ -21,12 +21,10 @@ const StudentAssignment: React.FC = () => {
     try {
       const [progressResponse, usersResponse] = await Promise.all([
         apiService.getCourseProgress(courseId!),
-        apiService.getStudents(), // Use new mentor-accessible endpoint
+        apiService.getStudents(),
       ]);
       
-      // Backend returns { progress: [...] }
       const progressData = progressResponse.progress || [];
-      // Transform to match frontend types
       const transformedProgress = progressData.map((item: any) => ({
         student_id: item.student?.id,
         student_name: item.student?.name,
@@ -41,7 +39,7 @@ const StudentAssignment: React.FC = () => {
       const usersData = usersResponse.users || [];
       
       setProgress(transformedProgress);
-      setAllUsers(usersData); // Already filtered to students only in backend
+      setAllUsers(usersData); 
     } catch (error) {
       console.error('Failed to load data:', error);
     } finally {

@@ -18,7 +18,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Load user from localStorage on mount
     const storedUser = localStorage.getItem('user');
     const token = localStorage.getItem('token');
     
@@ -43,7 +42,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const register = async (email: string, password: string, name: string, role: string) => {
     const response: AuthResponse = await apiService.register({ email, password, name, role });
     
-    // For students and approved mentors, store token
     if (response.token && response.user) {
       localStorage.setItem('token', response.token);
       localStorage.setItem('user', JSON.stringify(response.user));
