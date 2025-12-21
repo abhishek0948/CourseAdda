@@ -1,7 +1,7 @@
 import React from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { GraduationCap, LogOut, LayoutDashboard, BookOpen, Users, BarChart3 } from 'lucide-react';
+import { GraduationCap, LogOut, LayoutDashboard, BookOpen, BarChart3 } from 'lucide-react';
 
 const Layout: React.FC = () => {
   const { user, logout } = useAuth();

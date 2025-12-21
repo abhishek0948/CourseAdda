@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { BookOpen, Clock, Award } from 'lucide-react';
+import { BookOpen, Award } from 'lucide-react';
 import apiService from '../services/api';
 import { Progress } from '../types';
 
