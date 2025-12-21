@@ -46,64 +46,64 @@ const StudentDashboard: React.FC = () => {
   }
 
   return (
-    <div className="space-y-8 animate-fadeIn">
+    <div className="space-y-6 animate-fadeIn">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-4xl font-black text-gray-900 tracking-tight">My Courses</h1>
-          <p className="text-gray-600 mt-2 font-medium">Continue your learning journey</p>
+          <h1 className="text-3xl font-bold text-gray-900">My Courses</h1>
+          <p className="text-gray-600 mt-1">Continue your learning journey</p>
         </div>
       </div>
 
       {progress.length === 0 ? (
-        <div className="bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-xl p-16 text-center border border-gray-200">
-          <div className="bg-gradient-to-br from-primary-100 to-purple-100 w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6">
-            <BookOpen className="h-12 w-12 text-primary-600" />
+        <div className="bg-white rounded-xl shadow-md p-12 text-center border border-gray-200">
+          <div className="bg-blue-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
+            <BookOpen className="h-10 w-10 text-blue-600" />
           </div>
-          <h3 className="text-2xl font-black text-gray-900 mb-3">No courses assigned yet</h3>
-          <p className="text-gray-600 text-lg">Your mentor will assign courses to you soon.</p>
+          <h3 className="text-xl font-semibold text-gray-900 mb-2">No courses assigned yet</h3>
+          <p className="text-gray-600">Your mentor will assign courses to you soon.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {progress.map((course, index) => (
             <div
               key={course.course_id}
-              className="bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-lg hover:shadow-2xl transition-all overflow-hidden cursor-pointer hover-lift border border-gray-200 animate-fadeIn"
+              className="bg-white rounded-xl shadow-md hover:shadow-lg transition-all overflow-hidden cursor-pointer border border-gray-200 animate-fadeIn"
               onClick={() => handleViewCourse(course.course_id)}
               style={{animationDelay: `${index * 0.1}s`}}
             >
-              <div className="h-2 bg-gradient-to-r from-primary-500 via-purple-500 to-pink-500"></div>
-              <div className="p-7">
-                <div className="flex items-center justify-between mb-5">
-                  <div className="bg-gradient-to-br from-primary-100 to-purple-100 p-3 rounded-xl">
-                    <BookOpen className="h-7 w-7 text-primary-600" />
+              <div className="h-1.5 bg-blue-600"></div>
+              <div className="p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="bg-blue-100 p-2.5 rounded-lg">
+                    <BookOpen className="h-6 w-6 text-blue-600" />
                   </div>
                   {course.completion_percentage === 100 && (
-                    <div className="bg-amber-100 p-2 rounded-full">
-                      <Award className="h-6 w-6 text-amber-600" />
+                    <div className="bg-green-100 p-2 rounded-lg">
+                      <Award className="h-5 w-5 text-green-600" />
                     </div>
                   )}
                 </div>
 
-                <h3 className="text-xl font-black text-gray-900 mb-3 tracking-tight">
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">
                   {course.course_title}
                 </h3>
 
-                <div className="space-y-4 mt-5">
-                  <div className="flex items-center text-sm text-gray-700 font-semibold bg-gray-100 px-3 py-2 rounded-lg">
-                    <Clock className="h-4 w-4 mr-2 text-primary-600" />
+                <div className="space-y-3 mt-4">
+                  <div className="flex items-center text-sm text-gray-600 bg-gray-50 px-3 py-2 rounded-lg">
+                    <Clock className="h-4 w-4 mr-2 text-blue-600" />
                     <span>
                       {course.completed_chapters} of {course.total_chapters} chapters
                     </span>
                   </div>
 
                   <div>
-                    <div className="flex justify-between text-sm font-bold mb-2">
-                      <span className="text-gray-700">Progress</span>
-                      <span className="text-primary-600 text-base">{course.completion_percentage}%</span>
+                    <div className="flex justify-between text-sm font-medium mb-1.5">
+                      <span className="text-gray-600">Progress</span>
+                      <span className="text-blue-600">{course.completion_percentage}%</span>
                     </div>
-                    <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+                    <div className="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
                       <div
-                        className="bg-gradient-to-r from-primary-500 via-purple-500 to-pink-500 h-3 rounded-full transition-all duration-500 shadow-md"
+                        className="bg-blue-600 h-2.5 rounded-full transition-all duration-300"
                         style={{ width: `${course.completion_percentage}%` }}
                       ></div>
                     </div>

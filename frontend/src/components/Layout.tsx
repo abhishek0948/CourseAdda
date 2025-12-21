@@ -36,19 +36,19 @@ const Layout: React.FC = () => {
   const navItems = getNavItems();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+    <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white/80 backdrop-blur-lg shadow-lg sticky top-0 z-40 border-b border-gray-200">
+      <header className="bg-white shadow-sm sticky top-0 z-40 border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-5">
-            <div className="flex items-center gap-4 cursor-pointer group" onClick={() => navigate('/dashboard')}>
-              <div className="bg-gradient-to-br from-primary-500 to-purple-600 p-2.5 rounded-xl shadow-md group-hover:shadow-lg transition-all">
+          <div className="flex justify-between items-center py-4">
+            <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate('/dashboard')}>
+              <div className="bg-blue-600 p-2 rounded-lg shadow-sm">
                 <GraduationCap className="h-7 w-7 text-white" />
               </div>
               <div>
-                <h1 className="text-xl font-black text-gray-900 tracking-tight">CourseAdda</h1>
+                <h1 className="text-xl font-bold text-gray-900">CourseAdda</h1>
                 {user && (
-                  <p className="text-xs text-gray-600 capitalize font-semibold">
+                  <p className="text-xs text-gray-600 capitalize">
                     {user.role} Portal
                   </p>
                 )}
@@ -64,7 +64,7 @@ const Layout: React.FC = () => {
                   </div>
                   <button
                     onClick={handleLogout}
-                    className="flex items-center gap-2 px-5 py-2.5 text-sm font-bold text-white bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 rounded-xl shadow-md hover:shadow-lg transition-all transform hover:scale-105"
+                    className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
                   >
                     <LogOut className="h-4 w-4" />
                     <span className="hidden sm:inline">Logout</span>
@@ -76,14 +76,14 @@ const Layout: React.FC = () => {
 
           {/* Navigation */}
           {navItems.length > 0 && (
-            <nav className="flex gap-3 border-t border-gray-200 py-3">
+            <nav className="flex gap-2 border-t border-gray-200 py-2">
               {navItems.map((item) => (
                 <button
                   key={item.path}
                   onClick={() => navigate(item.path)}
-                  className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold transition-all transform hover:scale-105 ${
+                  className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                     window.location.pathname === item.path
-                      ? 'bg-gradient-to-r from-primary-500 to-purple-500 text-white shadow-md'
+                      ? 'bg-blue-600 text-white'
                       : 'text-gray-600 hover:bg-gray-100'
                   }`}
                 >

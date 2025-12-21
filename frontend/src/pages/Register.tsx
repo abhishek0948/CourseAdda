@@ -53,24 +53,18 @@ const Register: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500 flex items-center justify-center px-4 sm:px-6 lg:px-8 relative overflow-hidden">
-      {/* Animated background elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-white/10 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-white/10 rounded-full blur-3xl animate-pulse" style={{animationDelay: '1s'}}></div>
-      </div>
-      
-      <div className="max-w-md w-full space-y-8 glass-effect p-10 rounded-2xl shadow-2xl animate-scaleIn relative z-10">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50 flex items-center justify-center px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full space-y-8 bg-white p-10 rounded-2xl shadow-xl border border-gray-100 animate-scaleIn">
         <div className="text-center">
           <div className="flex justify-center">
-            <div className="bg-gradient-to-br from-primary-500 to-purple-600 p-3 rounded-2xl shadow-lg">
+            <div className="bg-blue-600 p-3 rounded-xl shadow-md">
               <GraduationCap className="h-12 w-12 text-white" />
             </div>
           </div>
-          <h2 className="mt-6 text-4xl font-black text-gray-900 tracking-tight">
+          <h2 className="mt-6 text-3xl font-bold text-gray-900">
             Join Us Today
           </h2>
-          <p className="mt-3 text-base text-gray-600 font-medium">
+          <p className="mt-2 text-gray-600">
             Start your learning journey with us
           </p>
         </div>
