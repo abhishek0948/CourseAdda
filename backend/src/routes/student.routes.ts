@@ -7,6 +7,8 @@ import {
   getCourseChapters,
   completeChapter,
   getMyProgress,
+  markProgress,
+  getCourseProgress,
 } from '../controllers/student.controller';
 
 const router = Router();
@@ -37,10 +39,24 @@ router.get('/courses/:courseId/chapters', getCourseChapters);
 router.post('/chapters/:chapterId/complete', completeChapter);
 
 /**
+ * @route   POST /api/student/progress
+ * @desc    Mark chapter progress (with courseId and chapterId in body)
+ * @access  Student only
+ */
+router.post('/progress', markProgress);
+
+/**
  * @route   GET /api/student/progress
  * @desc    Get overall progress across all courses
  * @access  Student only
  */
 router.get('/progress', getMyProgress);
+
+/**
+ * @route   GET /api/student/courses/:id/progress
+ * @desc    Get progress for a specific course
+ * @access  Student only
+ */
+router.get('/courses/:id/progress', getCourseProgress);
 
 export default router;

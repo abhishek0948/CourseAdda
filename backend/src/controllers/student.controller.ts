@@ -292,6 +292,141 @@ export const completeChapter = async (
   }
 };
 
+export const markProgress = async (
+  req: AuthRequest,
+  res: Response
+): Promise<void> => {
+  try {
+    const { courseId, chapterId } = req.body;
+    const studentId = req.user?.userId;
+
+    // Validate required fields
+    if (!courseId || !chapterId) {
+      res.status(400).json({ error: 'courseId and chapterId are required' });
+      return;
+    }
+
+    // Get chapter details
+    const { data: chapter, error: chapterError } = await supabase
+      .from('chapters')
+      .select('id, course_id, sequence_order')
+      .eq('id', chapterId)
+      .eq('course_id', courseId)
+      .single();
+
+    if (chapterError || !chapter) {
+      res.status(404).json({ error: 'Chapter not found' });
+      return;
+    }
+
+    // Verify student is assigned to this course
+    const { data: assignment, error: assignmentError } = await supabase
+      .from('course_assignments')
+      .select('*')
+      .eq('course_id', courseId)
+      .eq('student_id', studentId)
+      .single();
+
+    if (assignmentError || !assignment) {
+      res.status(403).json({ error: 'Forbidden: Course not assigned to you' });
+      return;
+    }
+
+    // Check if chapter is already completed
+    const { data: existingProgress } = await supabase
+      .from('progress')
+      .select('*')
+      .eq('chapter_id', chapterId)
+      .eq('student_id', studentId)
+      .single();
+
+    if (existingProgress) {
+      res.status(409).json({ 
+        message: 'Chapter already completed',
+        progress: existingProgress 
+      });
+      return;
+    }
+
+    // Mark chapter as completed
+    const { data: progress, error: progressError } = await supabase
+      .from('progress')
+      .insert({
+        student_id: studentId,
+        chapter_id: chapterId,
+        course_id: courseId,
+      })
+      .select()
+      .single();
+
+    if (progressError) {
+      console.error('Database error:', progressError);
+      res.status(500).json({ error: 'Failed to update progress' });
+      return;
+    }
+
+    res.status(200).json({
+      message: 'Progress updated successfully',
+      progress,
+    });
+  } catch (error) {
+    console.error('Mark progress error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+export const getCourseProgress = async (
+  req: AuthRequest,
+  res: Response
+): Promise<void> => {
+  try {
+    const { id: courseId } = req.params;
+    const studentId = req.user?.userId;
+
+    // Verify student is assigned to this course
+    const { data: assignment, error: assignmentError } = await supabase
+      .from('course_assignments')
+      .select('*')
+      .eq('course_id', courseId)
+      .eq('student_id', studentId)
+      .single();
+
+    if (assignmentError || !assignment) {
+      res.status(403).json({ error: 'Forbidden: Course not assigned to you' });
+      return;
+    }
+
+    // Get total chapters
+    const { count: totalChapters } = await supabase
+      .from('chapters')
+      .select('*', { count: 'exact', head: true })
+      .eq('course_id', courseId);
+
+    // Get completed chapters
+    const { data: completedChapters, count: completedCount } = await supabase
+      .from('progress')
+      .select('chapter_id, completed_at', { count: 'exact' })
+      .eq('course_id', courseId)
+      .eq('student_id', studentId);
+
+    const percentage = totalChapters 
+      ? Math.round(((completedCount || 0) / totalChapters) * 100)
+      : 0;
+
+    res.status(200).json({ 
+      progress: {
+        completedChapters: completedCount || 0,
+        totalChapters: totalChapters || 0,
+        percentage,
+        chapters: completedChapters || [],
+      }
+    });
+  } catch (error) {
+    console.error('Get course progress error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
 export const getMyProgress = async (
   req: AuthRequest,
   res: Response
